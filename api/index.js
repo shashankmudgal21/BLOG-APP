@@ -5,7 +5,7 @@ import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
 dotenv.config();
 const app = express();
-const PORT = 3001;
+const PORT = 3000;
 
 mongoose.connect(process.env.MONGO).then((d)=>{
     console.log("Database connected")
