@@ -7,6 +7,7 @@ import SignUp from './Pages/SignUp'
 import Projects from './Pages/Projects'
 import Dashboard from './Pages/Dashboard'
 import Header from './Components/Header'
+import Footer from './Components/Footer'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route exact path = "/projects" element = {<Projects/>}></Route>
         <Route exact path = "/dashboard" element = {<Dashboard/>}></Route>
       </Routes>
+      <Footer/>
     </BrowserRouter>
   )
 }
