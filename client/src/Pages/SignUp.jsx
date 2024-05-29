@@ -45,7 +45,6 @@ export default function SignUp() {
       setErrorMessage(error.message)
     }
   }
-  console.log(formData)
   return (
     <div className='mt-20 min-h-screen '>
       <div className='flex p-3 flex-col max-w-3xl md:flex-row mx-auto gap-10 md:items-center'>
