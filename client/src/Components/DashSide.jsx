@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 export default function DashSide() {
   const location = useLocation();
   const [tab, setTab] = useState(null);
-  console.log(tab);
+  // console.log(tab);
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const newTab = urlParams.get("tab");
@@ -22,6 +22,7 @@ export default function DashSide() {
               icon={FaRegUser}
               label={"User"}
               labelColor="dark"
+              as = "button"
             >
               Profile
             </Sidebar.Item>
