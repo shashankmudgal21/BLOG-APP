@@ -11,6 +11,7 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
+
   return (
     <div>
       <Navbar className="border-b-2">
@@ -42,12 +43,12 @@ export default function Header() {
             <Dropdown
               arrowIcon={false}
               inline
-              label={<Avatar img={currentUser?.rest.profilePicture} rounded />}
+              label={<Avatar img={currentUser?.rest?.profilePicture} rounded />}
             >
               <Dropdown.Header>
-                <span className="block text-sm">{currentUser?.rest.username}</span>
+                <span className="block text-sm">{currentUser?.rest?.username}</span>
                 <span className="block truncate text-sm font-medium">
-                {currentUser?.rest.email}
+                {currentUser?.rest?.email}
                 </span>
               </Dropdown.Header>
             
