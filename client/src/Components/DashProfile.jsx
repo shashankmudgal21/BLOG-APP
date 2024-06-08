@@ -104,6 +104,11 @@ export default function DashProfile() {
           id="email"
           defaultValue={currentUser?.rest?.email}
         />
+        <TextInput
+          type="text"
+          id="password"
+          defaultValue={"**********"}
+        />
         <Button type="submit" gradientDuoTone={"purpleToPink"} outline>
           Update Account
         </Button>
