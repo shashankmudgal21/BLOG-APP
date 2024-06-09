@@ -1,12 +1,14 @@
 import { Alert, Button, Modal, TextInput } from "flowbite-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Spinner } from "flowbite-react";
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import {Link} from 'react-router-dom'
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -17,13 +19,13 @@ import {
   deleteStart,
   deleteSuccess,
   deleteFailure,
-  signOutSuccess
+  signOutSuccess,
 } from "../redux/user/userSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function DashProfile() {
   const dispatch = useDispatch();
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
@@ -70,6 +72,7 @@ export default function DashProfile() {
       }
     );
   };
+  // console.log(currentUser.rest)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -197,8 +200,15 @@ export default function DashProfile() {
           onChange={handleChange}
         />
         <Button type="submit" gradientDuoTone={"purpleToPink"} outline>
-          Update Account
+          {loading ? <Spinner loading={loading} /> : "Update Account"}
         </Button>
+        {currentUser?.rest.isAdmin && (
+          <Link to = {'/create-post'}>
+            <Button className="w-full" gradientDuoTone={"purpleToPink"} outline>
+              Create a Post
+            </Button>
+          </Link>
+        )}
         <div className="flex justify-between">
           <span
             className="text-red-500 cursor-pointer"
