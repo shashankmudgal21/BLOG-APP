@@ -1,13 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  currentUser:null,
-  error:null,
-  loading:null
-}
+  currentUser: null,
+  error: null,
+  loading: null,
+};
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     signInStart: (state) => {
@@ -16,16 +16,16 @@ export const userSlice = createSlice({
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       state.loading = true;
-      state.error   = null
+      state.error = null;
     },
-    signInSuccess: (state,action) => {
+    signInSuccess: (state, action) => {
       state.currentUser = action.payload;
       state.loading = false;
-      state.error = null
+      state.error = null;
     },
     signInFailure: (state, action) => {
-      state.loading = false
-      state.error = action.payload
+      state.loading = false;
+      state.error = action.payload;
     },
     updateStart: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -33,21 +33,54 @@ export const userSlice = createSlice({
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       state.loading = true;
-      state.error   = null
+      state.error = null;
     },
-    updateSuccess: (state,action) => {
+    updateSuccess: (state, action) => {
       state.currentUser = action.payload;
       state.loading = false;
-      state.error = null
+      state.error = null;
     },
     updateFailure: (state, action) => {
-      state.loading = false
-      state.error = action.payload
+      state.loading = false;
+      state.error = action.payload;
+    },
+    deleteStart: (state) => {
+      // Redux Toolkit allows us to write "mutating" logic in reducers. It
+      // doesn't actually mutate the state because it uses the Immer library,
+      // which detects changes to a "draft state" and produces a brand new
+      // immutable state based off those changes
+      state.loading = true;
+      state.error = null;
+    },
+    deleteSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
+    },
+    deleteFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    signOutSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
     },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { signInStart, signInSuccess, signInFailure,updateStart,updateSuccess,updateFailure } = userSlice.actions
+export const {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+  updateStart,
+  updateSuccess,
+  updateFailure,
+  deleteStart,
+  deleteSuccess,
+  deleteFailure,
+  signOutSuccess
+} = userSlice.actions;
 
-export default userSlice.reducer
+export default userSlice.reducer;
