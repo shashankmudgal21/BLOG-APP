@@ -5,13 +5,15 @@ import 'react-quill/dist/quill.snow.css';
 import { Spinner } from 'flowbite-react';
 import  {getStorage, getDownloadURL, uploadBytesResumable, ref } from 'firebase/storage'
 import {app} from '../firebase'
+import { useNavigate } from 'react-router-dom';
 
 export default function CreatePost() {
+    const navigate = useNavigate();
     const [files,setFiles] = useState(null);
     const [imageProgress,setImageProgress] = useState(null)
     const [imageError,setImageError] = useState(null)
     const [formData,setFormData] = useState({});
-    console.log(formData)
+    const [postError,setPostError] = useState(null)
     const handleUploadImage = async()=>{
         if(!files){
             setImageError("select a image")
@@ -46,13 +48,37 @@ export default function CreatePost() {
             setImageError(error.message)
         }
     }
+    const handleSubmit = async(e)=>{
+        e.preventDefault()
+        try {
+            setPostError(null)
+            const res = await fetch('/api/post/create',{
+                method:"POST",
+                headers:{
+                    "Content-Type":"Application/json",
+                },
+                body:JSON.stringify(formData)
+            })
+            const data = await res.json();
+            console.log(data)
+            if(res.ok){
+                // console.log(data);
+                navigate(`/post/${data.slug}`);
+            }
+            else{
+                setPostError(data.message)
+            }
+        } catch (error) {
+            setPostError(error.message)
+        }
+    }
   return (
     <div className='p-3 min-h-screen max-w-3xl mx-auto'>
         <h1 className='text-semibold text-3xl text-center my-4'>Create post</h1>
-        <form className='flex flex-col  gap-4'>
+        <form onSubmit={handleSubmit} className='flex flex-col  gap-4'>
             <div className='flex flex-col sm:flex-row gap-3'>
-                <TextInput placeholder='Title' className='flex-1' required/>
-                <Select required>
+                <TextInput placeholder='Title' className='flex-1' required onChange={(e)=>setFormData({...formData,title:e.target.value})}/>
+                <Select required onChange={(e)=>setFormData({...formData,category:e.target.value})}>
                     <option value="uncategorized">Select a category</option>
                     <option value="javascript">Javascript</option>
                     <option value="react">React</option>
@@ -67,8 +93,9 @@ export default function CreatePost() {
             </div>
             {imageError && <Alert color={'failure'}>{imageError}</Alert>}
             {formData.image && <img className='w-full h-72 object-cover' src={formData.image}/>}
-            <ReactQuill theme="snow" className='h-72 mb-10' required />
+            <ReactQuill onChange={(value)=>setFormData({...formData,content:value})} theme="snow" className='h-72 mb-10' required />
             <Button type='submit' gradientDuoTone={'purpleToPink'} outline> Publish</Button>
+            {postError && <Alert color={'failure'}>{postError}</Alert>}
         </form>
     </div>
   )

@@ -10,7 +10,7 @@ export const createPost = async (req, res, next) => {
   const newPost = new Post({ ...req.body, slug, userId: req.user.id });
   try {
      const savedPost = await newPost.save();
-     res.status(200).json(newPost)
+     res.status(200).json(savedPost)
   } catch (error) {
     next(error)
   }
