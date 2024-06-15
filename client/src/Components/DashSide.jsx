@@ -5,7 +5,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutSuccess } from "../redux/user/userSlice";
-import { HiDocumentText } from "react-icons/hi";
+import { HiDocumentText, HiOutlineUserGroup } from "react-icons/hi";
 export default function DashSide() {
   const location = useLocation();
   const [tab, setTab] = useState(null);
@@ -60,6 +60,18 @@ export default function DashSide() {
                 as="button"
               >
                 Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser?.rest.isAdmin && (
+            <Link to={"/dashboard?tab=users"}>
+              <Sidebar.Item
+                active={tab === "users"}
+                icon={HiOutlineUserGroup}
+                labelColor="dark"
+                as="button"
+              >
+                Users
               </Sidebar.Item>
             </Link>
           )}

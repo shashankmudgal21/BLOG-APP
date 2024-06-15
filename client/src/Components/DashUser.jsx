@@ -3,37 +3,40 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { FaCheck } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
 
-const DashPost = () => {
+const DashUser = () => {
   const { currentUser } = useSelector((state) => state.user);
-  const [posts, setPost] = useState([]);
+  const [users, setusers] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  const [postId, setPostId] = useState("");
+  const [userId, setUserId] = useState("");
   useEffect(() => {
-    const getPost = async () => {
+    const getUser = async () => {
       const res = await fetch(
-        `/api/post/getAllPost?userId=${currentUser.rest._id}`
+        `/api/user/getUser`
       );
       const data = await res.json();
+      console.log(data)
       if (res.ok) {
-        setPost(data.posts);
-        if (data.posts.length < 9) setShowMore(false);
+        setusers(data.userWithoutPassword);
+        if (data.userWithoutPassword.length < 9) setShowMore(false);
       }
     };
-    if (currentUser?.rest.isAdmin) getPost();
+    if (currentUser?.rest.isAdmin) getUser();
   }, [currentUser?.rest._id]);
   const loadMore = async () => {
-    const startIndex = posts.length;
+    const startIndex = users.length;
     try {
       const res = await fetch(
-        `/api/post/getAllPost?userId=${currentUser.rest._id}&startIndex=${startIndex}`
+        `/api/user/getUser?startIndex=${startIndex}`
       );
       const data = await res.json();
-      console.log(data.posts);
+      console.log(data.userWithoutPassword);
       if (res.ok) {
-        setPost((prev) => [...prev, ...data.posts]);
-        if (data.posts.length < 9) setShowMore(false);
+        setUsers((prev) => [...prev, ...data.userWithoutPassword]);
+        if (data.userWithoutPassword.length < 9) setShowMore(false);
       }
     } catch (error) {
       console.log(error);
@@ -43,14 +46,14 @@ const DashPost = () => {
     setOpenModal(false);
     try {
       const res = await fetch(
-        `/api/post/delete/${postId}/${currentUser?.rest._id}`,
+        `/api/user/delete/${userId}`,
         {
           method: "DELETE",
         }
       );
       const data = await res.json();
       if (res.ok) {
-        setPost((prev) => prev.filter((post) => post._id !== postId));
+        setUsers((prev) => prev.filter((user) => user._id !== userId));
         console.log(data)
       } else {
         console.log(data);
@@ -61,41 +64,38 @@ const DashPost = () => {
   };
   return (
     <div className="p-3 md:mx-auto table-auto overflow-x-scroll scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
-      <Table>
+      <Table >
         <Table.Head>
-          <Table.HeadCell>Updated At</Table.HeadCell>
-          <Table.HeadCell>Post image</Table.HeadCell>
-          <Table.HeadCell>Post title</Table.HeadCell>
-          <Table.HeadCell>Category</Table.HeadCell>
+          <Table.HeadCell>Created At</Table.HeadCell>
+          <Table.HeadCell>User image</Table.HeadCell>
+          <Table.HeadCell>Username</Table.HeadCell>
+          <Table.HeadCell>email</Table.HeadCell>
+          <Table.HeadCell>Admin</Table.HeadCell>
           <Table.HeadCell>Delete</Table.HeadCell>
-          <Table.HeadCell>
-            <span>Edit</span>
-          </Table.HeadCell>
         </Table.Head>
-        {currentUser?.rest.isAdmin && posts?.length > 0 ? (
-          posts.map((post) => (
-            <Table.Body className="divide-y" key={post._id}>
+        {currentUser?.rest.isAdmin && users?.length > 0 ? (
+          users.map((user) => (
+            <Table.Body className="divide-y" key={user._id}>
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-700">
                 <Table.Cell>
-                  {new Date(post.updatedAt).toLocaleDateString()}
+                  {new Date(user.updatedAt).toLocaleDateString()}
                 </Table.Cell>
                 <Table.Cell>
-                  <Link to={`/post/${post.slug}`}>
                     <img
-                      src={post.image}
+                      src={user.profilePicture}
                       alt=""
-                      className="h-10 w-20 object-cover"
+                      className="rounded-full h-10 w-10 object-cover"
                     />
-                  </Link>
                 </Table.Cell>
                 <Table.Cell className="font-medium text-gray-900 dark:text-white">
-                  {post.title}
+                  {user.username}
                 </Table.Cell>
-                <Table.Cell>{post.category}</Table.Cell>
+                <Table.Cell>{user.email}</Table.Cell>
+                <Table.Cell>{user.isAdmin ? <FaCheck className="text-green-500"/> : <ImCross className="text-red-500"/>}</Table.Cell>
                 <Table.Cell>
                   <span
                     onClick={() => {
-                      setPostId(post._id);
+                      setUserId(user._id);
                       setOpenModal(true);
                     }}
                     className="font-semibold text-red-500 hover:underline cursor-pointer"
@@ -103,18 +103,11 @@ const DashPost = () => {
                     Delete
                   </span>
                 </Table.Cell>
-                <Table.Cell>
-                  <Link to={`/update-post/${post._id}`}>
-                    <span className="hover:underline font-semibold text-teal-500">
-                      Edit
-                    </span>
-                  </Link>
-                </Table.Cell>
               </Table.Row>
             </Table.Body>
           ))
         ) : (
-          <p>Post are not available</p>
+          <p>Users are not available</p>
         )}
       </Table>
       {showMore && (
@@ -156,4 +149,4 @@ const DashPost = () => {
   );
 };
 
-export default DashPost;
+export default DashUser;
