@@ -8,7 +8,7 @@ import { ImCross } from "react-icons/im";
 
 const DashUser = () => {
   const { currentUser } = useSelector((state) => state.user);
-  const [users, setusers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [userId, setUserId] = useState("");
@@ -20,7 +20,7 @@ const DashUser = () => {
       const data = await res.json();
       console.log(data)
       if (res.ok) {
-        setusers(data.userWithoutPassword);
+        setUsers(data.userWithoutPassword);
         if (data.userWithoutPassword.length < 9) setShowMore(false);
       }
     };
@@ -54,7 +54,7 @@ const DashUser = () => {
       const data = await res.json();
       if (res.ok) {
         setUsers((prev) => prev.filter((user) => user._id !== userId));
-        console.log(data)
+        console.log(users)
       } else {
         console.log(data);
       }
@@ -132,7 +132,7 @@ const DashUser = () => {
               onClick={handleDelete}
               className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"
             >
-              Are you sure you want to delete this blog?
+              Are you sure you want to delete this User?
             </h3>
             <div className="flex justify-center gap-4">
               <Button color="failure" onClick={handleDelete}>

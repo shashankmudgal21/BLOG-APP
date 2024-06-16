@@ -4,3 +4,29 @@
 .ql-editor{
     font-size: 1.5rem;
 }
+.post-content p{
+    margin-bottom: 1.5rem;
+}
+.post-content h1{
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: sans-serif;
+    margin: 1.5rem 0;
+}
+.post-content h2{
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-family: sans-serif;
+    margin: 1.5rem 0;
+}
+.post-content a{
+    text-decoration: none;
+    color:rgb(70, 160, 199);
+}
+
+.post-content a:hover{
+    text-decoration: underline;
+}
+.dark .post-content a {
+    color:red
+}
