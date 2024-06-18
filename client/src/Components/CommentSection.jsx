@@ -1,11 +1,13 @@
 import { Alert, Button, Textarea } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Comment from "./Comment";
 const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
+  const [commentData,setCommentData] = useState([]);
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -24,7 +26,7 @@ const CommentSection = ({ postId }) => {
       const data = await res.json();
       if (res.ok) {
         setComment("");
-        console.log(data);
+        setCommentData([data,...commentData])
       } else {
         setCommentError(data.message);
       }
@@ -33,6 +35,20 @@ const CommentSection = ({ postId }) => {
       setCommentError(error);
     }
   };
+  useEffect(()=>{
+    const getComment = async()=>{
+      try {
+        const res = await fetch(`/api/comment/getComment/${postId}`);
+        const data = await res.json();
+        if(res.ok){
+          setCommentData(data);
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getComment();
+  },[postId])
   return (
     <div>
       {currentUser ? (
@@ -81,6 +97,23 @@ const CommentSection = ({ postId }) => {
               {" "}
               {commentError}
             </Alert>
+          )}
+          {commentData.length === 0 ?(
+            <p className="my-5 text-sm">No comment yet</p>
+          ):(
+            <>
+            <div className="my-5 flex items-center gap-2 text-sm px-2">
+              Comments
+              <div className="border border-gray-400 py-1 px-2 rounded-sm">
+                {commentData.length}
+              </div>
+            </div>
+            <div>
+              {commentData?.map((c)=>(
+                <Comment key={c._id} comment={c}/>
+              ))}
+            </div>
+            </>
           )}
         </div>
       )}
