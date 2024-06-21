@@ -58,7 +58,7 @@ const CommentSection = ({ postId }) => {
 
       if (res.ok) {
         const data = await res.json();
-         setCommentData(
+        setCommentData(
           commentData?.map((c) =>
             c._id === commentId
               ? {
@@ -73,6 +73,13 @@ const CommentSection = ({ postId }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+  const handleEdit = async (comment, editedComment) => {
+    setCommentData(
+      commentData.map((c) =>
+        c._id === comment._id ? { ...c, content: editedComment } : c
+      )
+    );
   };
   return (
     <div>
@@ -125,23 +132,23 @@ const CommentSection = ({ postId }) => {
           )}
         </div>
       )}
-          {commentData.length === 0 ? (
-            <p className="my-5 text-sm">No comment yet</p>
-          ) : (
-            <>
-              <div className="my-5 flex items-center gap-2 text-sm px-2">
-                Comments
-                <div className="border border-gray-400 py-1 px-2 rounded-sm">
-                  {commentData?.length}
-                </div>
-              </div>
-              <div>
-                {commentData?.map((c) => (
-                  <Comment key={c._id} comment={c} onLike={handleLike} />
-                ))}
-              </div>
-            </>
-          )}
+      {commentData.length === 0 ? (
+        <p className="my-5 text-sm">No comment yet</p>
+      ) : (
+        <>
+          <div className="my-5 flex items-center gap-2 text-sm px-2">
+            Comments
+            <div className="border border-gray-400 py-1 px-2 rounded-sm">
+              {commentData?.length}
+            </div>
+          </div>
+          <div>
+            {commentData?.map((c) => (
+              <Comment key={c._id} comment={c} onLike={handleLike} onEdit = {handleEdit} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
