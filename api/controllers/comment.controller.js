@@ -66,3 +66,15 @@ export const editComment = async (req, res) => {
     res.status(200).json(editedComment);
   } catch (error) {}
 };
+export const deleteComment = async(req,res,next) =>{
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+    if(!comment && comment._id !== req.user._id){
+      return next(errorHandler(400,"comment can't be deleted"));
+    }
+    await Comment.findByIdAndDelete(req.params.commentId);
+    res.status(200).json("comment succesfully deleted")
+  } catch (error) {
+    next(error)
+  }
+}
