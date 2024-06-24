@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Sidebar } from "flowbite-react";
-import { FaRegUser } from "react-icons/fa";
+import { FaRegCommentDots, FaRegUser } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -72,6 +72,18 @@ export default function DashSide() {
                 as="button"
               >
                 Users
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser?.rest.isAdmin && (
+            <Link to={"/dashboard?tab=comments"}>
+              <Sidebar.Item
+                active={tab === "comment"}
+                icon={FaRegCommentDots}
+                labelColor="dark"
+                as="button"
+              >
+                Comments
               </Sidebar.Item>
             </Link>
           )}
