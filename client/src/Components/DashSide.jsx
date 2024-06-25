@@ -5,7 +5,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutSuccess } from "../redux/user/userSlice";
-import { HiDocumentText, HiOutlineUserGroup } from "react-icons/hi";
+import { HiChartPie, HiDocumentText, HiOutlineUserGroup } from "react-icons/hi";
 export default function DashSide() {
   const location = useLocation();
   const [tab, setTab] = useState(null);
@@ -39,6 +39,18 @@ export default function DashSide() {
     >
       <Sidebar.Items >
         <Sidebar.ItemGroup className="flex flex-col gap-1">
+        {currentUser?.rest.isAdmin && (
+            <Link to={"/dashboard?tab=dash"}>
+              <Sidebar.Item
+                active={tab === "dash"}
+                icon={HiChartPie}
+                labelColor="dark"
+                as="button"
+              >
+                Dashbord
+              </Sidebar.Item>
+            </Link>
+          )}
           <Link to={"/dashboard?tab=profile"}>
             <Sidebar.Item
               active={tab === "profile"}
@@ -87,6 +99,7 @@ export default function DashSide() {
               </Sidebar.Item>
             </Link>
           )}
+         
 
           <Sidebar.Item
             href="#"
