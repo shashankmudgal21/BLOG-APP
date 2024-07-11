@@ -26,7 +26,7 @@ export const getPost = async (req, res, next) => {
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.searchTerm && {
-        or: [
+        $or: [
           { title: { $regex: req.query.searchTerm, $options: "i" } },
           { content: { $regex: req.query.searchTerm, $options: "i" } },
         ],
@@ -69,6 +69,7 @@ export const updatePost = async(req,res,next) =>{
   if(!req.user.isAdmin && req.user.id !== req.params.userId){
     return next(errorHandler(400,'You are not allowed to update the post'))
   }
+  console.log(req.body.title)
   try {
      const updatedpost = await Post.findByIdAndUpdate(req.params.postId,{
       $set:{
@@ -81,6 +82,7 @@ export const updatePost = async(req,res,next) =>{
      },{new:true});
      res.status(200).json(updatedpost)
   } catch (error) {
+    console.log(error)
     next(error)
   }
 }

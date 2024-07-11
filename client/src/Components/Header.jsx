@@ -1,17 +1,20 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
-import { FaMoon,FaSun } from "react-icons/fa";
-import { useSelector,useDispatch } from "react-redux";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
 import { signOutSuccess } from "../redux/user/userSlice";
 
 export default function Header() {
+  const navigate = useNavigate();
   const path = useLocation().pathname;
+  const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState("");
   const handleSignOut = async () => {
     try {
       const res = await fetch("/api/user/signout", {
@@ -27,6 +30,20 @@ export default function Header() {
       console.log(error.message);
     }
   };
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) setSearchTerm(searchTermFromUrl);
+  }, [location.search]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    if (searchTerm) {
+      urlParams.set("searchTerm", searchTerm);
+    }
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`)
+  };
   return (
     <div>
       <Navbar className="border-b-2">
@@ -39,20 +56,31 @@ export default function Header() {
           </span>
           Blog
         </Link>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextInput
             type="text"
             placeholder="Search.."
             rightIcon={CiSearch}
             className="hidden lg:inline"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
-        <Button className="w-12 h-10 lg:hidden" color={"gray"} pill>
-          <CiSearch />
-        </Button>
+          <Button
+            className="w-12 h-10 lg:hidden "
+            color={"gray"}
+            pill
+          >
+            <CiSearch className="cursor-pointer" />
+          </Button>
         <div className="flex gap-2 order-2">
-          <Button className="w-12 h-10" color={"gray"} pill onClick={()=>dispatch(toggleTheme())}>;
-            {theme === 'light'?<FaMoon />:<FaSun/>}
+          <Button
+            className="w-12 h-10"
+            color={"gray"}
+            pill
+            onClick={() => dispatch(toggleTheme())}
+          >
+            ;{theme === "light" ? <FaMoon /> : <FaSun />}
           </Button>
           {currentUser ? (
             <Dropdown
@@ -61,19 +89,20 @@ export default function Header() {
               label={<Avatar img={currentUser?.rest?.profilePicture} rounded />}
             >
               <Dropdown.Header>
-                <span className="block text-sm">{currentUser?.rest?.username}</span>
+                <span className="block text-sm">
+                  {currentUser?.rest?.username}
+                </span>
                 <span className="block truncate text-sm font-medium">
-                {currentUser?.rest?.email}
+                  {currentUser?.rest?.email}
                 </span>
               </Dropdown.Header>
-            
+
               <Dropdown.Header>
-                <Link to={'/dashboard?tab=profile'} className="block text-sm">
-                <Dropdown.Item >Profile</Dropdown.Item>
+                <Link to={"/dashboard?tab=profile"} className="block text-sm">
+                  <Dropdown.Item>Profile</Dropdown.Item>
                 </Link>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleSignOut} >sign out</Dropdown.Item>
-             
+                <Dropdown.Item onClick={handleSignOut}>sign out</Dropdown.Item>
               </Dropdown.Header>
             </Dropdown>
           ) : (

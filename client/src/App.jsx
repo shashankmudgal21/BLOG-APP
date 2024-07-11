@@ -13,6 +13,7 @@ import OnlyAdminPrivateRoute from "./Components/OnlyAdminPrivateRoute";
 import CreatePost from "./Pages/CreatePost";
 import UpdatePost from "./Pages/UpdatePost";
 import PostPage from "./Pages/PostPage";
+import Search from "./Pages/Search";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
       <Routes>
         <Route exact path="/" element={<Home />}></Route>
         <Route exact path="/about" element={<About />}></Route>
+        <Route exact path="/search" element={<Search />}></Route>
         <Route exact path="/sign-in" element={<SignIn />}></Route>
         <Route exact path="/sign-up" element={<SignUp />}></Route>
         <Route exact path="/projects" element={<Projects />}></Route>
