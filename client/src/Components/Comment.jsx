@@ -24,7 +24,6 @@ const Comment = ({ comment, onLike,onEdit,onDelete }) => {
     };
     getUser();
   }, [comment?.userId]);
-  console.log(editedComment);
   const handleEdit = async () => {
     setIsEdit(true);
   };

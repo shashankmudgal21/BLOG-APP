@@ -30,7 +30,6 @@ const DashPost = () => {
         `/api/post/getAllPost?userId=${currentUser.rest._id}&startIndex=${startIndex}`
       );
       const data = await res.json();
-      console.log(data.posts);
       if (res.ok) {
         setPost((prev) => [...prev, ...data.posts]);
         if (data.posts.length < 9) setShowMore(false);
@@ -51,9 +50,6 @@ const DashPost = () => {
       const data = await res.json();
       if (res.ok) {
         setPost((prev) => prev.filter((post) => post._id !== postId));
-        console.log(data)
-      } else {
-        console.log(data);
       }
     } catch (error) {
       console.log(error);
