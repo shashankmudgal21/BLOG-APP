@@ -7,10 +7,10 @@ import postRouter from "./routes/post.route.js";
 import commentRouter from "./routes/comment.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
+const __dirname = path.resolve();
 dotenv.config();
 const app = express();
 const PORT = 3000;
-const __dirname = path.resolve();
 mongoose.connect(process.env.MONGO).then((d) => {
   console.log("Database connected");
 });
